@@ -1,0 +1,4 @@
+C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/project.dir
+C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/tests.dir
+C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -83,6 +83,32 @@ TEST_CASE("test no dots on tiny map"){
 }
 
 // tests for is_wall
+TEST_CASE("is_wall inside bounds") {
+    char test_map[] = {
+            WALL, EMPTY,
+            EMPTY, WALL
+    };
+    map = test_map;
+    width = 2;
+    height = 2;
+    CHECK(is_wall(0, 0) == YES_WALL);
+    CHECK(is_wall(1, 1) == YES_WALL);
+    CHECK(is_wall(0, 1) == NOT_WALL);
+}
+
+TEST_CASE("is_wall out of bounds") {
+    char test_map[] = {
+            EMPTY, EMPTY,
+            EMPTY, EMPTY
+    };
+    map = test_map;
+    width = 2;
+    height = 2;
+    CHECK(is_wall(-1, 0) == YES_WALL);
+    CHECK(is_wall(2, 0) == YES_WALL);
+    CHECK(is_wall(0, 2) == YES_WALL);
+}
+
 
 TEST_SUITE_END();
 
@@ -306,9 +332,9 @@ TEST_CASE("check_win test no dots") {
 }
 
 TEST_CASE("correct map test"){
-    CHECK(load_map("notmap.txt",&height,&width)==NULL);
-    CHECK(load_map("map.txt",&height,&width)!=NULL);
-    CHECK(load_map("map2.txt",&height,&width)!=NULL);
+    CHECK(load_map((char*)"notmap.txt",&height,&width)==NULL);
+    CHECK(load_map((char *)"map.txt",&height,&width)!=NULL);
+    CHECK(load_map((char *)"map2.txt",&height,&width)!=NULL);
 }
 
 TEST_CASE("test if wall"){

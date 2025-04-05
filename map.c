@@ -37,14 +37,15 @@ static void printc(char c) {
     printf("%c", c);
 }
 
-
-
+//This will print the map and put a border of walls around it
 void print_map(void) {
+    //top wall
     for (int i = 0; i < width + 2; i++) {
         printc(WALL);
         printf(" ");
     }
     printf("\n");
+    //side walls
     for (int k = 0; k < height; k++) {
         printc(WALL);
         printf(" ");
@@ -55,19 +56,23 @@ void print_map(void) {
         printc(WALL);
         printf("\n");
     }
+    //bottom wall
     for (int i = 0; i < width + 2; ++i) {
         printc(WALL);
         printf(" ");
     }
     printf("\n");
 
-    // printc(PLAYER);
-}
 
+}
+//determines in x,y position is a wall if not **NOTE TO SELF IS IS ONLY RETURNING NOT WALL SO FIX IT
 int is_wall(int y, int x) {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
+    // Check if the coordinates are out of bounds
+    if (y < 0 || y >= height || x < 0 || x >= width) {
         return YES_WALL;
     }
+
+    // Check if the tile at (y, x) is a wall
     if (map[y * width + x] == WALL) {
         return YES_WALL;
     }
@@ -75,6 +80,7 @@ int is_wall(int y, int x) {
     return NOT_WALL;
 }
 
+//Loads a map based on a given file
 char *load_map(char *filename, int *map_height, int *map_width) {
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
@@ -82,7 +88,7 @@ char *load_map(char *filename, int *map_height, int *map_width) {
         return NULL;
     }
 
-    // First pass: calculate height and max width
+    // First pass, calculate height and max width
     int width = 0, height = 0, current_width = 0;
     int c, col_counter = 0;
     while ((c = fgetc(fp)) != EOF) {
@@ -109,7 +115,7 @@ char *load_map(char *filename, int *map_height, int *map_width) {
     if (loaded_map == NULL) return NULL;
 
     int i = 0;
-    col_counter = 0;
+    col_counter = 0; //second pass, puts into map array
     while ((c = fgetc(fp)) != EOF) {
         if (c == '\n') {
             col_counter = 0;
@@ -140,7 +146,7 @@ char *load_map(char *filename, int *map_height, int *map_width) {
     fclose(fp);
     return loaded_map;
 }
-
+//finds position of the player and stores it
 void find_player(int *player_y, int *player_x) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
@@ -152,7 +158,8 @@ void find_player(int *player_y, int *player_x) {
         }
     }
 }
-
+//finds positions of ghosts and stores its
+//will stop after fine NUM GHOSTS
 void find_ghosts(int ghost_y[NUM_GHOSTS], int ghost_x[NUM_GHOSTS]) {
     int found = 0;
     for (int y = 0; y < height && found < NUM_GHOSTS; y++) {

@@ -31,19 +31,7 @@ int width, height;
  * final version of the project.
  * The map's dimensions are 9x9
  */
-#define HARDCODED_WIDTH 9
-#define HARDCODED_HEIGHT 9
-char hardcoded_map[] = {
-        GHOST, DOT, DOT, DOT, WALL, DOT, DOT, DOT, EMPTY,
-        DOT, WALL, WALL, DOT, WALL, DOT, WALL, WALL, DOT,
-        DOT, WALL, DOT, DOT, DOT, DOT, DOT, WALL, DOT,
-        DOT, WALL, DOT, WALL, WALL, WALL, DOT, WALL, DOT,
-        DOT, DOT, DOT, DOT, PLAYER, DOT, DOT, DOT, DOT,
-        DOT, WALL, DOT, WALL, WALL, WALL, DOT, WALL, DOT,
-        DOT, WALL, DOT, DOT, DOT, DOT, DOT, WALL, DOT,
-        DOT, WALL, WALL, DOT, WALL, DOT, WALL, WALL, DOT,
-        EMPTY, DOT, DOT, DOT, WALL, DOT, DOT, DOT, GHOST
-};
+
 
 // You are NOT allowed to add more global variables!
 // The globals that are included in the starter code provide a convenient way to share information
@@ -70,6 +58,7 @@ char hardcoded_map[] = {
  * @param ghost_x A pointer to the X coordinates of a ghost
  * @return
  */
+//updates ghost position if it can see player
 void update_ghost(int player_y, int player_x, int * ghost_y, int * ghost_x);
 
 // define a return code for a memory error
@@ -91,14 +80,12 @@ int main(void) {
     // This ensures that printf writes to the console immediately, instead of buffering.
     // If you remove this, you will not be able to rely on printf to work if your program crashes.
     setbuf(stdout, NULL);
-    //width= HARDCODED_WIDTH;
-    // height= HARDCODED_HEIGHT;
-    //map=hardcoded_map;
+    //load txt map from file
     map= load_map(MAP_NAME,&height, &width);
-    // allocate space for the dots
     if (map==NULL){
         return ERR_NO_MAP;
     }
+    //start dot map
     dot_map = malloc(width * height);
     if (dot_map == NULL) {
         return ERR_MEMORY;
@@ -113,26 +100,26 @@ int main(void) {
             }
         }
     }
-    int ng=0;
+    int ng=0; //say number of ghost starts at zero and check that at least 2
     for (int i = 0; i < width*height; ++i) {
-       if(map[i]==GHOST){
-           ng++;
-       }
+        if(map[i]==GHOST){
+            ng++;
+        }
     }
     if(ng<NUM_GHOSTS){
         return ERR_NO_GHOSTS;
-    }
+    }//check if player is present
     int pacman=0;
     for (int i = 0; i < width*height; ++i) {
-       if(map[i]==PLAYER){
-           pacman=1;
-       }
+        if(map[i]==PLAYER){
+            pacman=1;
+        }
     }
     if(pacman!=1){
         return ERR_NO_PLAYER;
     }
 
-
+//find player and ghosts on map
     int player_x, player_y;
     find_player(&player_y, &player_x);
 
@@ -140,45 +127,41 @@ int main(void) {
     find_ghosts(ghosts_y, ghosts_x);
 
 
+
     // input holds the user input
     char input = 0;
-    // we need the player position - we can hardcode it for now
-    //int player_x=4;
-    // int player_y= 4;
-    //find_player(&player_y, &player_x);
-    // we also need the ghosts positions - we can again hardcode them
-    //int ghosts_x[NUM_GHOSTS]={0,8}, ghosts_y[NUM_GHOSTS]= {0,8};
-    find_ghosts(ghosts_y, ghosts_x);
 
+    print_map();
     // loop until we hit the end of input
     while (input != EOF) {
         // print the map
-        print_map();
 
         input = getch();
         move_player(&player_y, &player_x, input);
 
-       // if (dot_map[player_y * width + player_x] == DOT) {
-         //   dot_map[player_y * width + player_x] = EMPTY;
-        //}
-        //printf("Player position: (%d, %d)\n", player_y, player_x);
-        for (int i = 0; i < NUM_GHOSTS; i++) {
-           // printf("Ghost %d position: (%d, %d)\n", i, ghosts_y[i], ghosts_x[i]);
+        if (dot_map[player_y * width + player_x] == DOT) {
+            dot_map[player_y * width + player_x] = EMPTY;
         }
-        /* if(check_win() == YOU_WIN){
-            print_map();
-            printf("Congratulations! You win!");
-            break;
-        }*/
+        //printf("Player position: (%d, %d)\n", player_y, player_x);
+        //for (int i = 0; i < NUM_GHOSTS; i++) {
+
+
+
 
         for (int ghost = 0; ghost < NUM_GHOSTS; ghost++) {
-            update_ghost(player_y, player_x, &ghosts_y[ghost], &ghosts_x[ghost]);
+            update_ghost(player_y, player_x, &ghosts_y[ghost], &ghosts_x[ghost]);// printf("Ghost %d position: (%d, %d)\n", i, ghosts_y[i], ghosts_x[i]);
         }
-        /*if(check_loss(player_y, player_x, ghosts_y, ghosts_x) == YOU_LOSE){
+        if(check_win() == YOU_WIN){
+            printf("\nCongratulations! You win!\n");
             print_map();
-            printf("Sorry, you lose.");
             break;
-        }*/
+        }
+        if(check_loss(player_y, player_x, ghosts_y, ghosts_x) == YOU_LOSE){
+            printf("\nSorry, you lose.\n");
+            print_map();
+            break;
+        }
+        print_map();
         // get a character - blocks until one is input
 
         // move the player
@@ -202,7 +185,7 @@ void update_ghost(int player_y, int player_x, int * ghost_y, int * ghost_x) {
     // if the ghost doesn't see the player
     if (direction == SEES_NOTHING) {
         // get a random direction, keeping track of if we already tried it
-        char tried_directions[] = {0,0,0,0};
+        char tried_directions[] = {0, 0, 0, 0};
         char direction_map[] = {UP, LEFT, DOWN, RIGHT};
         int move_result;
         do {

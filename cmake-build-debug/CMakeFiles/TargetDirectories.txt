@@ -1,4 +1,4 @@
-C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/project.dir
-C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/tests.dir
-C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/katie/OneDrive/Desktop/lab9/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/zoeremington/Downloads/142project-main/cmake-build-debug/CMakeFiles/project.dir
+/Users/zoeremington/Downloads/142project-main/cmake-build-debug/CMakeFiles/tests.dir
+/Users/zoeremington/Downloads/142project-main/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/zoeremington/Downloads/142project-main/cmake-build-debug/CMakeFiles/rebuild_cache.dir
